@@ -51,7 +51,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
                 <Bike className="w-5 h-5 text-sidebar-primary-foreground" />
               </div>
-              <span className="font-semibold text-sidebar-foreground text-lg">BikeRental</span>
+              <span className="font-semibold text-sidebar-foreground text-lg">Velo Admin</span>
             </div>
             <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(false)}>
               <X className="w-5 h-5" />
