@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, Pencil, Trash2, Search } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useToast } from "@/hooks/use-toast"
+import { API_BASE_URL, apiFetch } from "@/lib/api"
 
 const branches = ["CSE", "IT", "EE", "MECH", "CE", "ET"]
 const semesters = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -50,8 +51,6 @@ export function UsersManagement() {
   })
   const { toast } = useToast()
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
-
   useEffect(() => {
     fetchUsers()
   }, [])
@@ -59,7 +58,7 @@ export function UsersManagement() {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/api/admin/users`)
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/users`)
       if (!response.ok) throw new Error("Failed to fetch users")
       const data = await response.json()
       setUsers(data.data)
@@ -80,7 +79,7 @@ export function UsersManagement() {
     try {
       const url = editingUser ? `${API_BASE_URL}/api/admin/users/${editingUser._id}` : `${API_BASE_URL}/api/admin/users`
 
-      const response = await fetch(url, {
+      const response = await apiFetch(url, {
         method: editingUser ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -110,7 +109,7 @@ export function UsersManagement() {
     if (!confirm("Are you sure you want to delete this user?")) return
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/users/${id}`, {
         method: "DELETE",
       })
 
@@ -235,8 +234,8 @@ export function UsersManagement() {
                           <span
                             className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                               user.isActive
-                                ? "bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-400"
-                                : "bg-gray-50 text-gray-700 dark:bg-gray-950/30 dark:text-gray-400"
+                                ? "bg-[#6B9A00]/10 text-[#3F5A00] dark:bg-[#6B9A00]/20 dark:text-[#5fd6c8]"
+                                : "bg-muted text-muted-foreground"
                             }`}
                           >
                             {user.isActive ? "Active" : "Inactive"}

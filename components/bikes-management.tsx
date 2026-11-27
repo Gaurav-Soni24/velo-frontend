@@ -20,12 +20,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, Pencil, Trash2, Search, Circle } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useToast } from "@/hooks/use-toast"
+import { API_BASE_URL, apiFetch } from "@/lib/api"
 
 const bikeStatuses = [
-  { value: "available", label: "Available", color: "text-green-600 bg-green-50 dark:bg-green-950/30" },
-  { value: "rented", label: "Rented", color: "text-blue-600 bg-blue-50 dark:bg-blue-950/30" },
-  { value: "maintenance", label: "Maintenance", color: "text-amber-600 bg-amber-50 dark:bg-amber-950/30" },
-  { value: "missing", label: "Missing", color: "text-red-600 bg-red-50 dark:bg-red-950/30" },
+  { value: "available", label: "Available", color: "bg-[#6B9A00]/10 text-[#3F5A00] dark:bg-[#6B9A00]/20 dark:text-[#5fd6c8]" },
+  { value: "rented", label: "Rented", color: "bg-[#2440F0]/10 text-[#1A2FB8] dark:bg-[#2440F0]/20 dark:text-[#6fb8ee]" },
+  { value: "maintenance", label: "Maintenance", color: "bg-[#C77700]/12 text-[#8A5A00] dark:bg-[#C77700]/20 dark:text-[#f5a06b]" },
+  { value: "missing", label: "Missing", color: "bg-[#E5401F]/10 text-[#B3301A] dark:bg-[#E5401F]/20 dark:text-[#f2866c]" },
 ]
 
 interface Bike {
@@ -58,8 +59,6 @@ export function BikesManagement() {
   })
   const { toast } = useToast()
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
-
   useEffect(() => {
     fetchBikes()
   }, [])
@@ -67,7 +66,7 @@ export function BikesManagement() {
   const fetchBikes = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/api/admin/bikes`)
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/bikes`)
       if (!response.ok) throw new Error("Failed to fetch bikes")
       const data = await response.json()
       setBikes(data.data)
@@ -92,7 +91,7 @@ export function BikesManagement() {
         ? { bikeName: formData.bikeName, status: formData.status }
         : { bikeId: Number.parseInt(formData.bikeId), bikeName: formData.bikeName }
 
-      const response = await fetch(url, {
+      const response = await apiFetch(url, {
         method: editingBike ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -122,7 +121,7 @@ export function BikesManagement() {
     if (!confirm("Are you sure you want to delete this bike?")) return
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/bikes/${id}`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/bikes/${id}`, {
         method: "DELETE",
       })
 

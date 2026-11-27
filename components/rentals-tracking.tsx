@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search, Clock, CheckCircle2 } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useToast } from "@/hooks/use-toast"
+import { API_BASE_URL, apiFetch } from "@/lib/api"
 
 interface Rental {
   _id: string
@@ -34,8 +35,6 @@ export function RentalsTracking() {
   const [activeTab, setActiveTab] = useState("all")
   const { toast } = useToast()
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
-
   useEffect(() => {
     fetchRentals()
   }, [])
@@ -43,7 +42,7 @@ export function RentalsTracking() {
   const fetchRentals = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/api/admin/rentals`)
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/rentals`)
       if (!response.ok) throw new Error("Failed to fetch rentals")
       const data = await response.json()
       setRentals(data.data)
@@ -186,12 +185,12 @@ export function RentalsTracking() {
                               </TableCell>
                               <TableCell>
                                 {rental.status === "ongoing" ? (
-                                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium text-blue-600 bg-blue-50 dark:bg-blue-950/30">
+                                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#2440F0]/10 text-[#1A2FB8] dark:bg-[#2440F0]/20 dark:text-[#6fb8ee]">
                                     <Clock className="w-2 h-2" />
                                     Ongoing
                                   </span>
                                 ) : (
-                                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium text-green-600 bg-green-50 dark:bg-green-950/30">
+                                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#6B9A00]/10 text-[#3F5A00] dark:bg-[#6B9A00]/20 dark:text-[#5fd6c8]">
                                     <CheckCircle2 className="w-2 h-2" />
                                     Completed
                                   </span>

@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Plus, CheckCircle2, AlertTriangle, Search } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useToast } from "@/hooks/use-toast"
+import { API_BASE_URL, apiFetch } from "@/lib/api"
 
 const alertTypes = [
   { value: "missing_mismatch", label: "Missing Mismatch" },
@@ -55,8 +56,6 @@ export function AlertsManagement() {
   })
   const { toast } = useToast()
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
-
   useEffect(() => {
     fetchAlerts()
   }, [])
@@ -64,7 +63,7 @@ export function AlertsManagement() {
   const fetchAlerts = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/api/admin/alerts`)
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/alerts`)
       if (!response.ok) throw new Error("Failed to fetch alerts")
       const data = await response.json()
       setAlerts(data.data)
@@ -83,7 +82,7 @@ export function AlertsManagement() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/alerts`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/alerts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -111,7 +110,7 @@ export function AlertsManagement() {
 
   const handleResolve = async (id: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/alerts/${id}/resolve`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/admin/alerts/${id}/resolve`, {
         method: "PATCH",
       })
 
@@ -151,7 +150,7 @@ export function AlertsManagement() {
   const getAlertTypeBadge = (type: string) => {
     const alertType = alertTypes.find((t) => t.value === type)
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400">
+      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#C77700]/12 text-[#8A5A00] dark:bg-[#C77700]/20 dark:text-[#f5a06b]">
         {alertType?.label || type}
       </span>
     )
@@ -264,12 +263,12 @@ export function AlertsManagement() {
                           </TableCell>
                           <TableCell>
                             {alert.isResolved ? (
-                              <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium text-green-600 bg-green-50 dark:bg-green-950/30">
+                              <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#6B9A00]/10 text-[#3F5A00] dark:bg-[#6B9A00]/20 dark:text-[#5fd6c8]">
                                 <CheckCircle2 className="w-2 h-2" />
                                 Resolved
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium text-red-600 bg-red-50 dark:bg-red-950/30">
+                              <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium bg-[#E5401F]/10 text-[#B3301A] dark:bg-[#E5401F]/20 dark:text-[#f2866c]">
                                 <AlertTriangle className="w-2 h-2" />
                                 Pending
                               </span>
